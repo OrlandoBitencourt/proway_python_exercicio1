@@ -1,9 +1,3 @@
-123456789,Joao,22
-1234658745,PEDROSO,99
-1,Pepita,80
-999,Joao,23
-666,Capiroto,66
-2,Hideltrudes,84
 09423784909,Orlando,25
 07736279950,Rudolfo,30
 47373152066,Francielle,26
