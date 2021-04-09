@@ -7,6 +7,7 @@ carrinho_compras = []
 produtos_categoria = []
 produtos_no_carrinho = []
 produtos_list = []
+categorias_list = []
 
 menu_geral_validos = ['1', '2', '3', '4']
 menu_cliente_validos = ['1', '2', '3']
@@ -81,9 +82,37 @@ def verifica_cliente(cpf: str):
 # ------------Funções Produtos---------------------------
 
 def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
-    with open("produtos.txt", "a") as file:
-        dados = f"{codigo},{nome},{preco},{categoria}\n"
-        file.write(dados)
+    produtos_list.clear()
+    categorias_list.clear()
+    temp_prod_codigo = []
+    temp_categorias = []
+
+    with open("produtos.txt", "r") as file:
+        for i in file:
+            produtos_list.append(i.strip())
+
+    for prod in range(len(produtos_list)):
+        p = produtos_list[prod].split(",")[0]
+        temp_prod_codigo.append(p)
+
+    if codigo not in temp_prod_codigo:
+
+        with open("categorias.txt", "r") as file:
+            for i in file:
+                categorias_list.append(i.strip())
+
+        if categoria in categorias_list:
+            with open("produtos.txt", "a") as file:
+                dados = f"{codigo},{nome},{preco},{categoria}\n"
+                file.write(dados)
+                print(f"Produto cadastrado com sucesso! "
+                      f"{dados}\n")
+        else:
+            print("Categoria não licalizada!")
+    else:
+        print("Já existe um produto cadastrado com este codigo")
+
+
 
 
 def listar_produtos():
@@ -174,20 +203,27 @@ def cadastrar_categoria(nome: str):
     with open("categorias.txt", "a") as file:
         dados = f"{nome}\n"
         file.write(dados)
+        print("Categoria cadastrada com sucesso! \n")
 
 
 def listar_categorias():
+    categorias_list.clear()
     print(f"Lista de categorias: \n")
     with open("categorias.txt", "r") as file:
         for i in file:
             print(i.strip())
+            categorias_list.append(i.strip())
             print("-----------------")
+    print("\n")
 
 
 def deletar_categoria(nome):
     categorias = []
     contador = 0
     categoria = 0
+
+    categorias.clear()
+    produtos_categoria.clear()
 
     with open("categorias.txt", "r") as file:
 
@@ -215,16 +251,20 @@ def deletar_categoria(nome):
             for produtos_arquivo in file:
                 produtos_categoria.append(produtos_arquivo.strip())
 
-        for prod in range(len(produtos_categoria)):
-            cod_prod = produtos_categoria[prod].split(",")[0]
-            prod_nome = produtos_categoria[prod].split(",")[1]
-            prod_preco = produtos_categoria[prod].split(",")[2]
-            cat_produto = produtos_categoria[prod].split(",")[3]
+        for prod in range(len(produtos_categoria)-1):
+            try:
+                cod_prod = produtos_categoria[prod].split(",")[0]
+                prod_nome = produtos_categoria[prod].split(",")[1]
+                prod_preco = produtos_categoria[prod].split(",")[2]
+                cat_produto = produtos_categoria[prod].split(",")[3]
 
-            if nome == cat_produto:
-                print(produtos_categoria[prod])
-                produtos_categoria[prod] = produtos_categoria[prod].replace(nome, "NULL")
-
+                print("Produtos da categoria alterados:\n")
+                if nome == cat_produto:
+                    produtos_categoria[prod] = produtos_categoria[prod].replace(nome, "NULL")
+                    print(f"{produtos_categoria[prod]}")
+                print(f"-----------------------------\n")
+            except:
+                pass
         with open("produtos.txt", "w") as file:
             for prod in produtos_categoria:
                 file.write(f"{prod}\n")
@@ -292,7 +332,7 @@ def listar_produtos_categoria():
         for produtos_arquivo in file:
             produtos_categoria.append(produtos_arquivo.strip())
 
-    for prod in range(len(produtos_categoria)):
+    for prod in range(len(produtos_categoria)-1):
         cat_produto = produtos_categoria[prod].split(",")[3]
         if cat == cat_produto:
             print(produtos_categoria[prod])
@@ -318,6 +358,15 @@ def finalizar_carrinho():
         print(f"ITEM    |   PRECO")
         for prod in range(len(produtos_no_carrinho)):
             cpdt = produtos_no_carrinho[prod].split(",")[0]
+
+            #PRODUTOS ESTAO FICANDO DUPLICADOS COM ESSE CODIGO ABAIXO, POREM ISSO CORRIGE QUANDO É DIGITADO O MESMO PRODUTO 2x
+
+            # for codigos in carrinho_compras:
+            #     if cpdt in carrinho_compras:
+            #         pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
+            #         npdt = produtos_no_carrinho[prod].split(",")[1]
+            #         vpdt = float(produtos_no_carrinho[prod].split(",")[2])
+            #         print(f"{npdt}    |    R${vpdt}")
             if cpdt in carrinho_compras:
                 pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
                 npdt = produtos_no_carrinho[prod].split(",")[1]
@@ -337,6 +386,8 @@ def finalizar_carrinho():
                 print(f"Troco: R${dinheiro_recebido - valor_total}\n")
 
                 hora_agora = datetime.now()
+                format = "%Y-%m-%d"
+                hora_agora = hora_agora.strftime(format)
 
                 for codigos in carrinho_compras:
                     car_products = f"{car_products}{codigos};"
