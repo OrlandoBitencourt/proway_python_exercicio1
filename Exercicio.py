@@ -42,6 +42,8 @@ def alterar_produto(codigo):
     produtos = []
     contador = 0
 
+    produtos.clear()
+
     with open("produtos.txt", "r") as file:
         codigoInserido = codigo
 
@@ -81,15 +83,16 @@ def alterar_produto(codigo):
 def deletar_produto(codigo):
     produtos = []
     contador = 0
+
+    produtos.clear()
+
     with open("produtos.txt", "r") as file:
 
         codigo_inserido = codigo
 
-        # Puxa informações do file.txt e da append na list
         for i in file:
             produtos.append(i.strip())
 
-        # Busca o produto pelo codigo, e pede informações para serem alteradas
         for produto in range(len(produtos)):
             cod = produtos[produto].split(",")[0]
             if codigo_inserido == cod:
@@ -227,8 +230,10 @@ def finalizar_carrinho():
     npdt = ""
     vpdt = 0
     valor_compra = 0
+
+    produtos_no_carrinho.clear()
+
     if len(carrinho_compras) > 0:
-        produtos_no_carrinho.clear()
         with open("produtos.txt", "r") as file:
             for produto in file:
                 produtos_no_carrinho.append(produto.strip())
