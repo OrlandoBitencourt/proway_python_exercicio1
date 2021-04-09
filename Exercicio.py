@@ -4,7 +4,13 @@ clientesList = []
 carrinho_compras = []
 produtos_categoria = []
 produtos_no_carrinho = []
+produtos_list = []
 
+menu_geral_validos = ['1','2','3','4']
+menu_cliente_validos = ['1','2','3']
+menu_cliente_carrinho_validos = ['1','2','3','4','5','6','7']
+menu_produto_validos = ['1','2','3','4','5','6','7','8']
+menu_consulta_validos = ['1','2','3']
 valor_total = 0
 #------------Funções Clientes---------------------------
 
@@ -29,12 +35,13 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
         file.write(dados)
 
 
-
 def listar_produtos():
+    produtos_list.clear()
     print(f"Lista de produtos: \n")
     with open("produtos.txt", "r") as file:
         for i in file:
             print(i.strip())
+            produtos_list.append(i.strip())
             print("-----------------")
 
 
@@ -181,16 +188,24 @@ def informar_cliente():
 
 def carrinho_adicionar():
     cod = ""
+    codigo_informado = 0
     listar_produtos()
+
+
     while True:
-        carrinho_compras.append(input("Digite o codigo do produto desejado.\n"))
-        cod = input("Deseja adicionar mais algum produto? S ou N\n")
+        codigo_informado = (input("Digite o codigo do produto desejado.\n"))
+
+        if cod in produtos_list:
+            carrinho_compras.append(codigo_informado)
+            cod = input("Deseja adicionar mais algum produto? S ou N\n")
+        else:
+            print("Produto não localizado")
+            cod = input("Deseja informar outro codigo de produto? S ou N\n")
+
         if cod == "S":
             pass
         else:
             break
-
-
 
 def carrinho_remover():
     cod = ""
@@ -371,97 +386,140 @@ while True:
     print("3- Consultas")
     print("4-Sair")
 
-    menu_geral = int(input("Digite a opção desejada:\n"))#Escolha da opcao
+    menu_geral = input("Digite a opção desejada:\n")
 
-    if menu_geral == 1:
-        while True:
-            print("1. Nova Venda\n"
-                  "2. Cadastrar cliente\n"
-                  "3. Voltar\n")
-            menu_cliente = int(input("Digite a opção desejada:\n"))#Escolha da opcao
-            if menu_cliente == 1:
-                while True:
-                    print("1. Informar cliente:\n"
-                          "2. Adicionar produto:\n"
-                          "3. Remover produto:\n"
-                          "4. Listar categorias dos produtos:\n"
-                          "5. Listar produtos de categoria:\n"
-                          "6. Finalizar compras\n"
-                          "7. Voltar\n")
-                    menu_cliente_carrinho = int(input("Digite a opção desejada:\n"))
+    if menu_geral in menu_geral_validos:
+        if int(menu_geral) == 1:
+            while True:
+                print("1. Nova Venda\n"
+                      "2. Cadastrar cliente\n"
+                      "3. Voltar\n")
 
-                    if menu_cliente_carrinho == 1:
-                        informar_cliente()
-                    elif menu_cliente_carrinho == 2:
-                        carrinho_adicionar()
-                    elif menu_cliente_carrinho == 3:
-                        carrinho_remover()
-                    elif menu_cliente_carrinho == 4:
-                        listar_categorias()
-                    elif menu_cliente_carrinho == 5:
-                        listar_produtos_categoria()
-                    elif menu_cliente_carrinho == 6:
-                        finalizar_carrinho()
-                    elif menu_cliente_carrinho == 7:
+                menu_cliente = input("Digite a opção desejada:\n")
+
+                if menu_cliente in menu_cliente_validos:
+                    if int(menu_cliente) == 1:
+                        while True:
+                            print("1. Informar cliente:\n"
+                                  "2. Adicionar produto:\n"
+                                  "3. Remover produto:\n"
+                                  "4. Listar categorias dos produtos:\n"
+                                  "5. Listar produtos de categoria:\n"
+                                  "6. Finalizar compras\n"
+                                  "7. Voltar\n")
+
+                            menu_cliente_carrinho = input("Digite a opção desejada:\n")
+                            if menu_cliente_carrinho in menu_cliente_carrinho_validos:
+                                if int(menu_cliente_carrinho) == 1:
+                                    informar_cliente()
+
+                                elif int(menu_cliente_carrinho) == 2:
+                                    carrinho_adicionar()
+
+                                elif int(menu_cliente_carrinho) == 3:
+                                    carrinho_remover()
+
+                                elif int(menu_cliente_carrinho) == 4:
+                                    listar_categorias()
+
+                                elif int(menu_cliente_carrinho) == 5:
+                                    listar_produtos_categoria()
+
+                                elif int(menu_cliente_carrinho) == 6:
+                                    finalizar_carrinho()
+
+                                elif int(menu_cliente_carrinho) == 7:
+                                    break
+                            else:
+                                print("Digite um valor valido do menu!")
+                                pass
+
+                    elif int(menu_cliente) == 2:
+                        menu_cliente_nome = input("Digite seu nome:\n")
+                        menu_cliente_cpf = input("Digite seu cpf:\n")
+                        menu_cliente_idade = input("Digite seu idade:\n")
+
+                        cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
+
+                    elif int(menu_cliente) == 3:
                         break
+                else:
+                    print("Digite um valor valido do menu!")
+                    pass
 
-            elif menu_cliente == 2:
-                menu_cliente_nome = input("Digite seu nome:\n")
-                menu_cliente_cpf = input("Digite seu cpf:\n")
-                menu_cliente_idade = input("Digite seu idade:\n")
+        if int(menu_geral) == 2:
+            while True:
+                print("1. Cadastrar produto:\n"
+                      "2. Cadastrar categoria:\n"
+                      "3. Alterar produto:\n"
+                      "4. Listar produtos:\n"
+                      "5. Listar categorias:\n"
+                      "6. Deletar produto:\n"
+                      "7. Deletar categoria:\n"
+                      "8. Voltar:\n")
 
-                cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
-            elif menu_cliente == 3:
-                break
-    if menu_geral == 2:
-        while True:
-            print("1. Cadastrar produto:\n"
-                  "2. Cadastrar categoria:\n"
-                  "3. Alterar produto:\n"
-                  "4. Listar produtos:\n"
-                  "5. Listar categorias:\n"
-                  "6. Deletar produto:\n"
-                  "7. Deletar categoria:\n"
-                  "8. Voltar:\n")
-            menu_produto = int(input("Digite a opção desejada: "))  # Escolha da opcao
-            if menu_produto == 1:
-                menu_produto_codigo = input("Digite o codigo do produto:\n")
-                menu_produto_nome = input("Digite o nome do produto:\n")
-                menu_produto_preco = input("Digite o preco do produto:\n")
-                menu_produto_categoria = input("Digite a categoria do produto:\n")
+                menu_produto = input("Digite a opção desejada: ")
 
-                cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco, menu_produto_categoria)
+                if menu_produto in menu_produto_validos:
+                    if int(menu_produto) == 1:
+                        menu_produto_codigo = input("Digite o codigo do produto:\n")
+                        menu_produto_nome = input("Digite o nome do produto:\n")
+                        menu_produto_preco = input("Digite o preco do produto:\n")
+                        menu_produto_categoria = input("Digite a categoria do produto:\n")
 
-            elif menu_produto == 2:
-                menu_produto_categoria_nome = input("Digite a categoria:\n")
-                cadastrar_categoria(menu_produto_categoria_nome)
-            elif menu_produto == 3:
-                menu_produto_alterar_codigo = input("Digite o código do produto a ser alterado:\n")
-                alterar_produto(menu_produto_alterar_codigo)
-            elif menu_produto == 4:
-                listar_produtos()
-            elif menu_produto == 5:
-                listar_categorias()
-            elif menu_produto == 6:
-                menu_produto_deletar = input("Digite um codigo de produto para ser removido:\n")
-                deletar_produto(menu_produto_deletar)
-            elif menu_produto == 7:
-                menu_produto_categoria_deletar = input("Digite o nome da categoria a ser removida.\n")
-                deletar_categoria(menu_produto_categoria_deletar)
-            elif menu_produto == 8:
-                break
-    if menu_geral == 3:
-        while True:
-            print("1. Consulta clientes cadastrados:\n"
-                  "2. Histórico de vendas:\n"
-                  "3. Voltar:\n")
-            menu_consulta = int(input("Digite a opção desejada:\n"))  # Escolha da opcao
+                        cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco, menu_produto_categoria)
 
-            if menu_consulta == 1:
-                listar_clientes()
-            elif menu_consulta == 2:
-                listar_vendas()
-            elif menu_consulta == 3:
-                break
-    if menu_geral == 4:
-        break
+                    elif int(menu_produto) == 2:
+                        menu_produto_categoria_nome = input("Digite a categoria:\n")
+                        cadastrar_categoria(menu_produto_categoria_nome)
+
+                    elif int(menu_produto) == 3:
+                        menu_produto_alterar_codigo = input("Digite o código do produto a ser alterado:\n")
+                        alterar_produto(menu_produto_alterar_codigo)
+
+                    elif int(menu_produto) == 4:
+                        listar_produtos()
+
+                    elif int(menu_produto) == 5:
+                        listar_categorias()
+
+                    elif int(menu_produto) == 6:
+                        menu_produto_deletar = input("Digite um codigo de produto para ser removido:\n")
+                        deletar_produto(menu_produto_deletar)
+
+                    elif int(menu_produto) == 7:
+                        menu_produto_categoria_deletar = input("Digite o nome da categoria a ser removida.\n")
+                        deletar_categoria(menu_produto_categoria_deletar)
+
+                    elif int(menu_produto) == 8:
+                        break
+                else:
+                    print("Digite um valor valido do menu!")
+                    pass
+
+        if int(menu_geral) == 3:
+            while True:
+                print("1. Consulta clientes cadastrados:\n"
+                      "2. Histórico de vendas:\n"
+                      "3. Voltar:\n")
+
+                menu_consulta = input("Digite a opção desejada:\n")  # Escolha da opcao
+
+                if menu_consulta in menu_consulta_validos:
+                    if int(menu_consulta) == 1:
+                        listar_clientes()
+
+                    elif int(menu_consulta) == 2:
+                        listar_vendas()
+
+                    elif int(menu_consulta) == 3:
+                        break
+                else:
+                    print("Digite um valor valido do menu!")
+                    pass
+
+        if int(menu_geral) == 4:
+            break
+    else:
+        print("Digite um valor valido do menu!")
+        pass
