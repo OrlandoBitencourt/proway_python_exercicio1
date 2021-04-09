@@ -1,18 +1,22 @@
 from datetime import datetime
+import cpf_tools as validator
 
 clientesList = []
+lista_cadastrados = []
 carrinho_compras = []
 produtos_categoria = []
 produtos_no_carrinho = []
 produtos_list = []
 
-menu_geral_validos = ['1','2','3','4']
-menu_cliente_validos = ['1','2','3']
-menu_cliente_carrinho_validos = ['1','2','3','4','5','6','7']
-menu_produto_validos = ['1','2','3','4','5','6','7','8']
-menu_consulta_validos = ['1','2','3']
+menu_geral_validos = ['1', '2', '3', '4']
+menu_cliente_validos = ['1', '2', '3']
+menu_cliente_carrinho_validos = ['1', '2', '3', '4', '5', '6', '7']
+menu_produto_validos = ['1', '2', '3', '4', '5', '6', '7', '8']
+menu_consulta_validos = ['1', '2', '3']
 valor_total = 0
-#------------Funções Clientes---------------------------
+
+
+# ------------Funções Clientes---------------------------
 
 def cadastrar_cliente(cpf: str, nome: str, idade: str):
     with open("clientes.txt", "a") as file:
@@ -27,7 +31,54 @@ def listar_clientes():
             print(i.strip())
             print("-----------------")
 
-#------------Funções Produtos---------------------------
+
+def verifica_cpf_login(cpf: str):
+    contador_cpf_validador = 0
+    lista_cadastrados.clear()
+
+    with open("clientes.txt", "r") as file:
+        for i in file:
+            lista_cadastrados.append(i.strip())
+
+    for cli in range(len(lista_cadastrados)):
+        cpf_cadastro = lista_cadastrados[cli].split(",")[0]
+        if cpf == cpf_cadastro:
+            contador_cpf_validador = 1
+
+    if int(contador_cpf_validador) == 1:
+        return True
+    else:
+        return False
+
+
+def verifica_cliente(cpf: str):
+    contador_validador = 0
+    lista_cadastrados.clear()
+    with open("clientes.txt", "r") as file:
+        for i in file:
+            lista_cadastrados.append(i.strip())
+
+    for cli in range(len(lista_cadastrados)):
+        cpf_cadastro = lista_cadastrados[cli].split(",")[0]
+        if cpf == cpf_cadastro:
+            contador_validador = 1
+
+    cpf_valido = validator.cpf_str_validation(cpf)
+
+    if cpf_valido == False and int(contador_validador) == 0:
+        contador_validador = 2
+
+    if int(contador_validador) == 0:
+        return True
+    elif int(contador_validador) == 1:
+        print("CPF já existe um cadastro desse cpf.\n")
+        return False
+    elif int(contador_validador) == 2:
+        print("CPF inválido\n")
+        return False
+
+
+# ------------Funções Produtos---------------------------
 
 def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
     with open("produtos.txt", "a") as file:
@@ -74,7 +125,7 @@ def alterar_produto(codigo):
                 if nova_categoria == "":
                     nova_categoria = produtos[produto].split(",")[3]
 
-                produtos[produto] = f"{codigoInserido},{novo_nome},{novo_preco},{nova_categoria}\n"
+                produtos[produto] = f"{codigoInserido},{novo_nome},{novo_preco},{nova_categoria}"
 
     # Reescreve o arquivo.txt com a lista com as novas informações!
     with open("produtos.txt", "w") as file:
@@ -90,7 +141,6 @@ def alterar_produto(codigo):
 def deletar_produto(codigo):
     produtos = []
     contador = 0
-
     produtos.clear()
 
     with open("produtos.txt", "r") as file:
@@ -117,13 +167,14 @@ def deletar_produto(codigo):
         print("Produto deletado com sucesso!\n")
 
 
-#------------Funções Categoria---------------------------
+# ------------Funções Categoria---------------------------
 
 
 def cadastrar_categoria(nome: str):
     with open("categorias.txt", "a") as file:
         dados = f"{nome}\n"
         file.write(dados)
+
 
 def listar_categorias():
     print(f"Lista de categorias: \n")
@@ -178,34 +229,46 @@ def deletar_categoria(nome):
             for prod in produtos_categoria:
                 file.write(f"{prod}\n")
 
-#------------Funções Venda---------------------------
+
+# ------------Funções Venda---------------------------
 
 def informar_cliente():
     login_cliente = input("Deseja logar como cliente?\n"
                           "Informe seu CPF:\n")
-    return login_cliente
+
+    login = verifica_cpf_login(login_cliente)
+
+    if login == True:
+        print(f"Cliente logado: {login_cliente}")
+        return login_cliente
+    else:
+        print("Cpf nao localizado!")
+        return False
 
 
 def carrinho_adicionar():
     cod = ""
-    codigo_informado = 0
     listar_produtos()
-
-
     while True:
-        codigo_informado = (input("Digite o codigo do produto desejado.\n"))
-
-        if cod in produtos_list:
-            carrinho_compras.append(codigo_informado)
-            cod = input("Deseja adicionar mais algum produto? S ou N\n")
-        else:
-            print("Produto não localizado")
-            cod = input("Deseja informar outro codigo de produto? S ou N\n")
-
+        carrinho_compras.append(input("Digite o codigo do produto desejado.\n"))
+        cod = input("Deseja adicionar mais algum produto? S ou N\n")
         if cod == "S":
             pass
         else:
             break
+
+
+def carrinho_adicionar():
+    cod = ""
+    listar_produtos()
+    while True:
+        carrinho_compras.append(input("Digite o codigo do produto desejado.\n"))
+        cod = input("Deseja adicionar mais algum produto? S ou N\n")
+        if cod == "S":
+            pass
+        else:
+            break
+
 
 def carrinho_remover():
     cod = ""
@@ -221,7 +284,6 @@ def carrinho_remover():
 
 
 def listar_produtos_categoria():
-
     listar_categorias()
     cat = input("Informe a categoria que desejar")
 
@@ -234,7 +296,7 @@ def listar_produtos_categoria():
         cat_produto = produtos_categoria[prod].split(",")[3]
         if cat == cat_produto:
             print(produtos_categoria[prod])
-            
+
     return produtos_categoria
 
 
@@ -257,7 +319,7 @@ def finalizar_carrinho():
         for prod in range(len(produtos_no_carrinho)):
             cpdt = produtos_no_carrinho[prod].split(",")[0]
             if cpdt in carrinho_compras:
-                pre_produto = float(pre_produto)+float(produtos_no_carrinho[prod].split(",")[2])
+                pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
                 npdt = produtos_no_carrinho[prod].split(",")[1]
                 vpdt = float(produtos_no_carrinho[prod].split(",")[2])
                 print(f"{npdt}    |    R${vpdt}")
@@ -265,10 +327,9 @@ def finalizar_carrinho():
         print(f"\nValor total da compra: R${str(valor_total)}\n")
 
         modalidade_pagamento = int(input("Insira a modalidade de pagamento:\n"
-                                 "1. Dinheiro\n"
-                                 "2. Cartão\n"
-                                 "3. Voltar\n"))
-
+                                         "1. Dinheiro\n"
+                                         "2. Cartão\n"
+                                         "3. Voltar\n"))
 
         if modalidade_pagamento == 1:
             dinheiro_recebido = float(input("Informe a quantia paga pelo cliente: \n"))
@@ -292,8 +353,8 @@ def finalizar_carrinho():
                 npdt = ""
                 vpdt = 0
 
-                
-                
+
+
         elif modalidade_pagamento == 2:
             cartoes = []
             numeros_cartoes = []
@@ -362,11 +423,10 @@ def finalizar_carrinho():
 
         elif modalidade_pagamento == 3:
             return print("Pagamento Cancelado!")
-        
-        
+
+
     else:
         return print("Carrinho vazio!")
-
 
 
 def listar_vendas():
@@ -377,9 +437,7 @@ def listar_vendas():
             print("-----------------")
 
 
-
-
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 while True:
     print("1-Area do Cliente")
     print("2-Area do Produto")
@@ -435,11 +493,17 @@ while True:
                                 pass
 
                     elif int(menu_cliente) == 2:
-                        menu_cliente_nome = input("Digite seu nome:\n")
                         menu_cliente_cpf = input("Digite seu cpf:\n")
-                        menu_cliente_idade = input("Digite seu idade:\n")
 
-                        cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
+                        menu_cliente_cpf = menu_cliente_cpf.replace('.', '').replace('-', '')
+
+                        valida_cpf = verifica_cliente(menu_cliente_cpf)
+
+                        if valida_cpf == True:
+                            menu_cliente_nome = input("Digite seu nome:\n")
+                            menu_cliente_idade = input("Digite seu idade:\n")
+
+                            cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
 
                     elif int(menu_cliente) == 3:
                         break
@@ -467,13 +531,15 @@ while True:
                         menu_produto_preco = input("Digite o preco do produto:\n")
                         menu_produto_categoria = input("Digite a categoria do produto:\n")
 
-                        cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco, menu_produto_categoria)
+                        cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco,
+                                          menu_produto_categoria)
 
                     elif int(menu_produto) == 2:
                         menu_produto_categoria_nome = input("Digite a categoria:\n")
                         cadastrar_categoria(menu_produto_categoria_nome)
 
                     elif int(menu_produto) == 3:
+                        listar_produtos()
                         menu_produto_alterar_codigo = input("Digite o código do produto a ser alterado:\n")
                         alterar_produto(menu_produto_alterar_codigo)
 
@@ -484,10 +550,12 @@ while True:
                         listar_categorias()
 
                     elif int(menu_produto) == 6:
+                        listar_produtos()
                         menu_produto_deletar = input("Digite um codigo de produto para ser removido:\n")
                         deletar_produto(menu_produto_deletar)
 
                     elif int(menu_produto) == 7:
+                        listar_categorias()
                         menu_produto_categoria_deletar = input("Digite o nome da categoria a ser removida.\n")
                         deletar_categoria(menu_produto_categoria_deletar)
 
