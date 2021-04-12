@@ -22,7 +22,8 @@ valida_campo = False
 symbols = ['!', '@', '#', '$', '%', '^', '&',
            '*', '(', ')', '<', '>', ',', '=',
            '´', '`', '¨', '^', "~", "'", '"',
-           "'", "ª", "º", "{", "}"]
+           "'", "ª", "º", "{", "}", "-", "[",
+           "]"]
 
 numeros = '0123456789'
 alfabeto = string.ascii_letters
@@ -30,6 +31,9 @@ alfabeto = string.ascii_letters
 #-------------Verificadores------------------------------
 
 def verifica_campo_float(valor_digitado):
+    if len(valor_digitado) == 0:
+        print("Digite algum valor!")
+        return False
     for caracter in valor_digitado:
             if caracter in symbols:
                 print(f"Valor não permitido para o campo, use apenas caracteres válidos. Utilize ponto para numeros decimais.\n")
@@ -44,6 +48,9 @@ def verifica_campo_float(valor_digitado):
 
 
 def verifica_campo_string(nome_campo, valor_digitado):
+    if len(valor_digitado) == 0:
+        print("Digite algum valor!")
+        return False
     for caracter in valor_digitado:
             if caracter in symbols:
                 print(f"Valor não permitido para o campo, use apenas caracteres válidos.\n")
@@ -52,6 +59,9 @@ def verifica_campo_string(nome_campo, valor_digitado):
 
 
 def verifica_campo_numerico(valor_digitado):
+    if len(valor_digitado) == 0:
+        print("Digite algum valor!")
+        return False
     for numero in valor_digitado:
         if numero not in numeros:
             print(f"Valor não permitido para o campo, use apenas numeros.\n")
@@ -149,7 +159,7 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
                 print(f"Produto cadastrado com sucesso! "
                       f"{dados}\n")
         else:
-            print("Categoria não licalizada!")
+            print("Categoria não localizada!")
     else:
         print("Já existe um produto cadastrado com este codigo")
 
@@ -204,6 +214,7 @@ def alterar_produto(codigo):
 
 
                 #NOVA CATEGORIA
+                listar_categorias()
                 valida_campo = False
                 while True:
                     nova_categoria = input("Digite a nova categoria do produto: \n")
@@ -211,14 +222,6 @@ def alterar_produto(codigo):
                     if valida_campo == True:
                         nova_categoria = nova_categoria.lower()
                         break
-
-
-                if novo_nome == "":
-                    novo_nome = produtos[produto].split(",")[1]
-                if novo_preco == "":
-                    novo_preco = produtos[produto].split(",")[2]
-                if nova_categoria == "":
-                    nova_categoria = produtos[produto].split(",")[3]
 
                 produtos[produto] = f"{codigoInserido},{novo_nome},{novo_preco},{nova_categoria}"
 
@@ -726,7 +729,9 @@ while True:
                             if valida_campo == True:
                                 break
 
+
                         #NOME CATEGORIA
+                        listar_categorias()
                         valida_campo = False
                         while True:
                            menu_produto_categoria = input("Digite a categoria do produto:\n")
