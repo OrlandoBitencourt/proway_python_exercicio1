@@ -14,8 +14,30 @@ menu_cliente_validos = ['1', '2', '3']
 menu_cliente_carrinho_validos = ['1', '2', '3', '4', '5', '6', '7']
 menu_produto_validos = ['1', '2', '3', '4', '5', '6', '7', '8']
 menu_consulta_validos = ['1', '2', '3']
-valor_total = 0
 
+valor_total = 0
+valida_campo = False
+
+symbols = ['!', '@', '#', '$', '%', '^', '&',
+           '*', '(', ')', '<', '>', ',']
+numeros = '0123456789'
+
+#-------------Verificadores------------------------------
+
+def verifica_campo_string(nome_campo, valor_digitado):
+    for caracter in valor_digitado:
+            if caracter in symbols:
+                print(f"Valor não permitido para o campo, use apenas caracteres válidos.\n")
+                return False
+    return True
+
+
+def verifica_campo_numerico(valor_digitado):
+    for numero in valor_digitado:
+        if numero not in numeros:
+            print(f"Valor não permitido para o campo, use apenas numeros.\n")
+            return False
+    return True
 
 # ------------Funções Clientes---------------------------
 
@@ -143,9 +165,28 @@ def alterar_produto(codigo):
             cod = produtos[produto].split(",")[0]
             if codigoInserido == cod:
                 contador = 1
-                novo_nome = input("Digite o novo nome do produto: \n")
+
+                #NOVO NOME
+                valida_campo = False
+                while True:
+                    novo_nome = input("Digite o novo nome do produto: \n")
+                    valida_campo = verifica_campo_string("nome", novo_nome)
+                    if valida_campo == True:
+                        novo_nome = novo_nome.lower()
+                        break
+
+                #NOVO PREÇO
                 novo_preco = input("Digite o novo preço do produto: \n")
-                nova_categoria = input("Digite a nova categoria do produto: \n")
+
+                #NOVA CATEGORIA
+                valida_campo = False
+                while True:
+                    nova_categoria = input("Digite a nova categoria do produto: \n")
+                    valida_campo = verifica_campo_string("nome", nova_categoria)
+                    if valida_campo == True:
+                        nova_categoria = nova_categoria.lower()
+                        break
+
 
                 if novo_nome == "":
                     novo_nome = produtos[produto].split(",")[1]
@@ -544,8 +585,22 @@ while True:
                         valida_cpf = verifica_cliente(menu_cliente_cpf)
 
                         if valida_cpf == True:
-                            menu_cliente_nome = input("Digite seu nome:\n")
-                            menu_cliente_idade = input("Digite seu idade:\n")
+                            #NOME
+                            valida_campo = False
+                            while True:
+                                menu_cliente_nome = input("Digite seu nome:\n")
+                                valida_campo = verifica_campo_string("nome", menu_cliente_nome)
+                                if valida_campo == True:
+                                    menu_cliente_nome = menu_cliente_nome.lower()
+                                    break
+
+                            #IDADE
+                            valida_campo = False
+                            while True:
+                                menu_cliente_idade = input("Digite seu idade:\n")
+                                valida_campo = verifica_campo_numerico(menu_cliente_idade)
+                                if valida_campo == True:
+                                    break
 
                             cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
 
@@ -570,16 +625,50 @@ while True:
 
                 if menu_produto in menu_produto_validos:
                     if int(menu_produto) == 1:
-                        menu_produto_codigo = input("Digite o codigo do produto:\n")
-                        menu_produto_nome = input("Digite o nome do produto:\n")
+
+                        #CODIGO PRODUTO
+                        valida_campo = False
+                        while True:
+                            menu_produto_codigo = input("Digite o codigo do produto:\n")
+                            valida_campo = verifica_campo_numerico(menu_produto_codigo)
+                            if valida_campo == True:
+                                break
+
+                        #NOME PRODUTO
+                        valida_campo = False
+                        while True:
+                            menu_produto_nome = input("Digite o nome do produto:\n")
+                            valida_campo = verifica_campo_string("nome", menu_produto_nome)
+                            if valida_campo == True:
+                                nome_funcionario = menu_produto_nome.lower()
+                                break
+
+                        #PRECO PRODUTO
                         menu_produto_preco = input("Digite o preco do produto:\n")
-                        menu_produto_categoria = input("Digite a categoria do produto:\n")
+
+                        #NOME CATEGORIA
+                        valida_campo = False
+                        while True:
+                           menu_produto_categoria = input("Digite a categoria do produto:\n")
+                           valida_campo = verifica_campo_string("nome", menu_produto_categoria)
+                           if valida_campo == True:
+                               menu_produto_categoria = menu_produto_categoria.lower()
+                               break
 
                         cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco,
                                           menu_produto_categoria)
 
                     elif int(menu_produto) == 2:
-                        menu_produto_categoria_nome = input("Digite a categoria:\n")
+
+                        #NOME CATEGORIA
+                        valida_campo = False
+                        while True:
+                            menu_produto_categoria_nome = input("Digite a categoria:\n")
+                            valida_campo = verifica_campo_string("nome", menu_produto_categoria_nome)
+                            if valida_campo == True:
+                                nome_funcionario = menu_produto_categoria_nome.lower()
+                                break
+
                         cadastrar_categoria(menu_produto_categoria_nome)
 
                     elif int(menu_produto) == 3:
@@ -600,7 +689,16 @@ while True:
 
                     elif int(menu_produto) == 7:
                         listar_categorias()
-                        menu_produto_categoria_deletar = input("Digite o nome da categoria a ser removida.\n")
+
+                        #CATEGORIA
+                        valida_campo = False
+                        while True:
+                           menu_produto_categoria_deletar = input("Digite o nome da categoria a ser removida.\n")
+                           valida_campo = verifica_campo_string("nome", menu_produto_categoria_deletar)
+                           if valida_campo == True:
+                               menu_produto_categoria_deletar = menu_produto_categoria_deletar.lower()
+                               break
+
                         deletar_categoria(menu_produto_categoria_deletar)
 
                     elif int(menu_produto) == 8:
