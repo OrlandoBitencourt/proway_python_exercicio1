@@ -155,6 +155,7 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
         if categoria in categorias_list:
             with open("produtos.txt", "a") as file:
                 dados = f"{codigo},{nome},{preco},{categoria}\n"
+                dados = f"{codigo},{nome},{preco},{categoria}\n"
                 file.write(dados)
                 print(f"Produto cadastrado com sucesso! "
                       f"{dados}\n")
@@ -247,13 +248,15 @@ def deletar_produto(codigo):
 
         for i in file:
             produtos.append(i.strip())
+        try:
+            for produto in range(len(produtos)):
+                cod = produtos[produto].split(",")[0]
+                if codigo_inserido == cod:
+                    contador = 1
 
-        for produto in range(len(produtos)):
-            cod = produtos[produto].split(",")[0]
-            if codigo_inserido == cod:
-                contador = 1
-
-                produtos.remove(produtos[produto])
+                    produtos.remove(produtos[produto])
+        except:
+            pass
 
     with open("produtos.txt", "w") as file:
         for x in produtos:
