@@ -1,5 +1,6 @@
 from datetime import datetime
 import cpf_tools as validator
+import string
 
 clientesList = []
 lista_cadastrados = []
@@ -19,10 +20,28 @@ valor_total = 0
 valida_campo = False
 
 symbols = ['!', '@', '#', '$', '%', '^', '&',
-           '*', '(', ')', '<', '>', ',']
+           '*', '(', ')', '<', '>', ',', '=',
+           '´', '`', '¨', '^', "~", "'", '"',
+           "'", "ª", "º", "{", "}"]
+
 numeros = '0123456789'
+alfabeto = string.ascii_letters
 
 #-------------Verificadores------------------------------
+
+def verifica_campo_float(valor_digitado):
+    for caracter in valor_digitado:
+            if caracter in symbols:
+                print(f"Valor não permitido para o campo, use apenas caracteres válidos. Utilize ponto para numeros decimais.\n")
+                return False
+            elif caracter in alfabeto:
+                print(f"Valor não permitido para o campo, use apenas caracteres válidos. Utilize ponto para numeros decimais.\n")
+                return False
+            elif valor_digitado == ".":
+                print(f"Valor nulo, inform um numero valido!\n")
+                return False
+    return True
+
 
 def verifica_campo_string(nome_campo, valor_digitado):
     for caracter in valor_digitado:
@@ -176,7 +195,13 @@ def alterar_produto(codigo):
                         break
 
                 #NOVO PREÇO
-                novo_preco = input("Digite o novo preço do produto: \n")
+                valida_campo = False
+                while True:
+                    novo_preco = input("Digite o novo preço do produto: \n")
+                    valida_campo = verifica_campo_float(novo_preco)
+                    if valida_campo == True:
+                        break
+
 
                 #NOVA CATEGORIA
                 valida_campo = False
@@ -444,7 +469,15 @@ def finalizar_carrinho():
                                          "3. Voltar\n"))
 
         if modalidade_pagamento == 1:
-            dinheiro_recebido = float(input("Informe a quantia paga pelo cliente: \n"))
+            # NOVO PREÇO
+            valida_campo = False
+            while True:
+                dinheiro_recebido = input("Informe a quantia paga pelo cliente: \n")
+                valida_campo = verifica_campo_float(dinheiro_recebido)
+                if valida_campo == True:
+                    dinheiro_recebido = float(dinheiro_recebido)
+                    break
+
             if dinheiro_recebido >= valor_total:
                 print(f"Troco: R${dinheiro_recebido - valor_total}\n")
 
@@ -476,8 +509,17 @@ def finalizar_carrinho():
             validades_cartoes = []
             saldo_cartoes = []
 
-            card = input("Insira o numero do cartão:\n")
-            senha = input("Insira sua senha:\n")
+            while True:
+                card = input("Insira o numero do cartão:\n")
+                valida_campo = verifica_campo_numerico(card)
+                if valida_campo == True:
+                    break
+
+            while True:
+                senha = input("Insira sua senha:\n")
+                valida_campo = verifica_campo_numerico(senha)
+                if valida_campo == True:
+                    break
 
             with open("credit_cards.txt", "r") as file:
                 for cartao in file:
@@ -673,7 +715,14 @@ while True:
                                 break
 
                         #PRECO PRODUTO
-                        menu_produto_preco = input("Digite o preco do produto:\n")
+
+                        # PREÇO
+                        valida_campo = False
+                        while True:
+                            menu_produto_preco = input("Digite o preco do produto:\n")
+                            valida_campo = verifica_campo_float(menu_produto_preco)
+                            if valida_campo == True:
+                                break
 
                         #NOME CATEGORIA
                         valida_campo = False
