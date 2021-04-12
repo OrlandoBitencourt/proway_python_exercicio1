@@ -292,6 +292,7 @@ def deletar_categoria(nome):
             for produtos_arquivo in file:
                 produtos_categoria.append(produtos_arquivo.strip())
 
+        print("Produtos da categoria alterados:\n")
         for prod in range(len(produtos_categoria)-1):
             try:
                 cod_prod = produtos_categoria[prod].split(",")[0]
@@ -299,13 +300,13 @@ def deletar_categoria(nome):
                 prod_preco = produtos_categoria[prod].split(",")[2]
                 cat_produto = produtos_categoria[prod].split(",")[3]
 
-                print("Produtos da categoria alterados:\n")
                 if nome == cat_produto:
                     produtos_categoria[prod] = produtos_categoria[prod].replace(nome, "NULL")
                     print(f"{produtos_categoria[prod]}")
-                print(f"-----------------------------\n")
             except:
                 pass
+        print(f"-----------------------------\n")
+
         with open("produtos.txt", "w") as file:
             for prod in produtos_categoria:
                 file.write(f"{prod}\n")
@@ -332,19 +333,7 @@ def carrinho_adicionar():
     listar_produtos()
     while True:
         carrinho_compras.append(input("Digite o codigo do produto desejado.\n"))
-        cod = input("Deseja adicionar mais algum produto? S ou N\n")
-        if cod == "S":
-            pass
-        else:
-            break
-
-
-def carrinho_adicionar():
-    cod = ""
-    listar_produtos()
-    while True:
-        carrinho_compras.append(input("Digite o codigo do produto desejado.\n"))
-        cod = input("Deseja adicionar mais algum produto? S ou N\n")
+        cod = input("Deseja adicionar mais algum produto? Digite S, ou qualquer outro character para sair.\n")
         if cod == "S":
             pass
         else:
@@ -352,31 +341,68 @@ def carrinho_adicionar():
 
 
 def carrinho_remover():
+    produtos_no_carrinho.clear()
     cod = ""
-    for item in carrinho_compras:
-        print(item)
+    print("PRODUTOS NO CARRINHO: ")
 
+    with open("produtos.txt", "r") as file:
+        for produtos_arquivo in file:
+            produtos_no_carrinho.append(produtos_arquivo.strip())
+
+    for item in carrinho_compras:
+        for prod in range(len(produtos_no_carrinho)):
+            try:
+                cod_prod = produtos_no_carrinho[prod].split(",")[0]
+                prod_nome = produtos_no_carrinho[prod].split(",")[1]
+                prod_preco = produtos_no_carrinho[prod].split(",")[2]
+                cat_produto = produtos_no_carrinho[prod].split(",")[3]
+
+                if item == cod_prod:
+                    print(f"{produtos_no_carrinho[prod]}")
+            except:
+                pass
     while True:
-        cod = input("Deseja cancelar algum produto? S ou N\n")
-        if cod == "S":
-            carrinho_compras.remove(input("Digite o codigo do produto a ser cancelado:\n"))
-        else:
+        #CODIGO DO ITEM
+        valida_campo = False
+        while True:
+            item_a_remover = input("\nDigite o codigo do produto a ser removido do carrinho (ou N para sair): \n")
+
+            if len(item_a_remover) == 0:
+                print("Valor em branco, por favor digite um codigo valido.\n")
+            elif item_a_remover == 'N':
+                break
+            elif item_a_remover in carrinho_compras:
+                valida_campo = verifica_campo_numerico(item_a_remover)
+                carrinho_compras.remove(item_a_remover)
+            if valida_campo == True:
+                break
+        if item_a_remover == 'N':
             break
+        else:
+            cod = input("Deseja cancelar mais algum produto? Digite S, ou qualquer outro character para sair.\n")
+            if cod == "S":
+                pass
+            else:
+                break
 
 
 def listar_produtos_categoria():
     listar_categorias()
-    cat = input("Informe a categoria que desejar")
+    cat = input("Informe a categoria: \n")
 
     print(f"Lista de categorias:\n")
+
     with open("produtos.txt", "r") as file:
         for produtos_arquivo in file:
             produtos_categoria.append(produtos_arquivo.strip())
 
-    for prod in range(len(produtos_categoria)-1):
-        cat_produto = produtos_categoria[prod].split(",")[3]
-        if cat == cat_produto:
-            print(produtos_categoria[prod])
+    try:
+        for prod in range(len(produtos_categoria)):
+            cat_produto = produtos_categoria[prod].split(",")[3]
+            if cat == cat_produto:
+                print(produtos_categoria[prod])
+    except:
+        pass
 
     return produtos_categoria
 
@@ -397,14 +423,17 @@ def finalizar_carrinho():
                 produtos_no_carrinho.append(produto.strip())
 
         print(f"ITEM    |   PRECO")
-        for codigos in carrinho_compras:
-            for prod in range(len(produtos_no_carrinho)):
-                cpdt = produtos_no_carrinho[prod].split(",")[0]
-                if codigos == cpdt:
-                    pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
-                    npdt = produtos_no_carrinho[prod].split(",")[1]
-                    vpdt = float(produtos_no_carrinho[prod].split(",")[2])
-                    print(f"{npdt}    |    R${vpdt}")
+        try:
+            for codigos in carrinho_compras:
+                for prod in range(len(produtos_no_carrinho)):
+                    cpdt = produtos_no_carrinho[prod].split(",")[0]
+                    if codigos == cpdt:
+                        pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
+                        npdt = produtos_no_carrinho[prod].split(",")[1]
+                        vpdt = float(produtos_no_carrinho[prod].split(",")[2])
+                        print(f"{npdt}    |    R${vpdt}")
+        except:
+            pass
 
         valor_total = pre_produto
         print(f"\nValor total da compra: R${str(valor_total)}\n")
