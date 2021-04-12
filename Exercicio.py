@@ -28,33 +28,36 @@ symbols = ['!', '@', '#', '$', '%', '^', '&',
 numeros = '0123456789'
 alfabeto = string.ascii_letters
 
-#-------------Verificadores------------------------------
+# -------------Verificadores------------------------------
+
 
 def verifica_campo_float(valor_digitado):
     if len(valor_digitado) == 0:
         print("Digite algum valor!")
         return False
     for caracter in valor_digitado:
-            if caracter in symbols:
-                print(f"Valor não permitido para o campo, use apenas caracteres válidos. Utilize ponto para numeros decimais.\n")
-                return False
-            elif caracter in alfabeto:
-                print(f"Valor não permitido para o campo, use apenas caracteres válidos. Utilize ponto para numeros decimais.\n")
-                return False
-            elif valor_digitado == ".":
-                print(f"Valor nulo, inform um numero valido!\n")
-                return False
+        if caracter in symbols:
+            print(f"Valor não permitido para o campo, use apenas caracteres válidos. "
+                  f"Utilize ponto para numeros decimais.\n")
+            return False
+        elif caracter in alfabeto:
+            print(f"Valor não permitido para o campo, use apenas caracteres válidos. "
+                  f"Utilize ponto para numeros decimais.\n")
+            return False
+        elif valor_digitado == ".":
+            print(f"Valor nulo, inform um numero valido!\n")
+            return False
     return True
 
 
 def verifica_campo_string(nome_campo, valor_digitado):
     if len(valor_digitado) == 0:
-        print("Digite algum valor!")
+        print(f"Digite algum valor {nome_campo}!")
         return False
     for caracter in valor_digitado:
-            if caracter in symbols:
-                print(f"Valor não permitido para o campo, use apenas caracteres válidos.\n")
-                return False
+        if caracter in symbols:
+            print(f"Valor não permitido para o campo, use apenas caracteres válidos.\n")
+            return False
     return True
 
 
@@ -69,6 +72,7 @@ def verifica_campo_numerico(valor_digitado):
     return True
 
 # ------------Funções Clientes---------------------------
+
 
 def cadastrar_cliente(cpf: str, nome: str, idade: str):
     with open("clientes.txt", "a") as file:
@@ -136,7 +140,6 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
     produtos_list.clear()
     categorias_list.clear()
     temp_prod_codigo = []
-    temp_categorias = []
 
     with open("produtos.txt", "r") as file:
         for i in file:
@@ -155,7 +158,6 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
         if categoria in categorias_list:
             with open("produtos.txt", "a") as file:
                 dados = f"{codigo},{nome},{preco},{categoria}\n"
-                dados = f"{codigo},{nome},{preco},{categoria}\n"
                 file.write(dados)
                 print(f"Produto cadastrado com sucesso! "
                       f"{dados}\n")
@@ -163,8 +165,6 @@ def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
             print("Categoria não localizada!")
     else:
         print("Já existe um produto cadastrado com este codigo")
-
-
 
 
 def listar_produtos():
@@ -212,7 +212,6 @@ def alterar_produto(codigo):
                     valida_campo = verifica_campo_float(novo_preco)
                     if valida_campo == True:
                         break
-
 
                 #NOVA CATEGORIA
                 listar_categorias()
@@ -723,15 +722,12 @@ while True:
                                 break
 
                         #PRECO PRODUTO
-
-                        # PREÇO
                         valida_campo = False
                         while True:
                             menu_produto_preco = input("Digite o preco do produto:\n")
                             valida_campo = verifica_campo_float(menu_produto_preco)
                             if valida_campo == True:
                                 break
-
 
                         #NOME CATEGORIA
                         listar_categorias()
