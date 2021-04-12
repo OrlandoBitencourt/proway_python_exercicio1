@@ -481,9 +481,11 @@ def finalizar_carrinho():
             if dinheiro_recebido >= valor_total:
                 print(f"Troco: R${dinheiro_recebido - valor_total}\n")
 
+                data_atual = datetime.now()
+                data_atual = data_atual.strftime("%Y-%m-%d")
+
                 hora_agora = datetime.now()
-                format = "%Y-%m-%d"
-                hora_agora = hora_agora.strftime(format)
+                hora_agora = hora_agora.strftime("%Y-%m-%d %H:%M:%S")
 
                 for codigos in carrinho_compras:
                     car_products = f"{car_products}{codigos};"
@@ -535,11 +537,11 @@ def finalizar_carrinho():
                 validades_cartoes.append(d)
                 saldo_cartoes.append(a)
 
-            hora_agora = datetime.now()
-
             data_atual = datetime.now()
-            format = "%Y-%m-%d"
-            data_atual = data_atual.strftime(format)
+            data_atual = data_atual.strftime("%Y-%m-%d")
+
+            hora_agora = datetime.now()
+            hora_agora = hora_agora.strftime("%Y-%m-%d %H:%M:%S")
 
             idx = 0
 
