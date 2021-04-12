@@ -356,22 +356,15 @@ def finalizar_carrinho():
                 produtos_no_carrinho.append(produto.strip())
 
         print(f"ITEM    |   PRECO")
-        for prod in range(len(produtos_no_carrinho)):
-            cpdt = produtos_no_carrinho[prod].split(",")[0]
+        for codigos in carrinho_compras:
+            for prod in range(len(produtos_no_carrinho)):
+                cpdt = produtos_no_carrinho[prod].split(",")[0]
+                if codigos == cpdt:
+                    pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
+                    npdt = produtos_no_carrinho[prod].split(",")[1]
+                    vpdt = float(produtos_no_carrinho[prod].split(",")[2])
+                    print(f"{npdt}    |    R${vpdt}")
 
-            #PRODUTOS ESTAO FICANDO DUPLICADOS COM ESSE CODIGO ABAIXO, POREM ISSO CORRIGE QUANDO É DIGITADO O MESMO PRODUTO 2x
-
-            # for codigos in carrinho_compras:
-            #     if cpdt in carrinho_compras:
-            #         pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
-            #         npdt = produtos_no_carrinho[prod].split(",")[1]
-            #         vpdt = float(produtos_no_carrinho[prod].split(",")[2])
-            #         print(f"{npdt}    |    R${vpdt}")
-            if cpdt in carrinho_compras:
-                pre_produto = float(pre_produto) + float(produtos_no_carrinho[prod].split(",")[2])
-                npdt = produtos_no_carrinho[prod].split(",")[1]
-                vpdt = float(produtos_no_carrinho[prod].split(",")[2])
-                print(f"{npdt}    |    R${vpdt}")
         valor_total = pre_produto
         print(f"\nValor total da compra: R${str(valor_total)}\n")
 
