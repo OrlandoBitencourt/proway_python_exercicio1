@@ -1,6 +1,11 @@
 from datetime import datetime
 import cpf_tools as validator
 import string
+import clientes
+import produtos
+import vendas
+import categorias
+
 
 from verificadores import verifica_campo_float, verifica_campo_string, verifica_campo_numerico
 
@@ -61,22 +66,22 @@ while True:
                             menu_cliente_carrinho = input("Digite a opção desejada:\n")
                             if menu_cliente_carrinho in menu_cliente_carrinho_validos:
                                 if int(menu_cliente_carrinho) == 1:
-                                    informar_cliente()
+                                    clientes.informar_cliente()
 
                                 elif int(menu_cliente_carrinho) == 2:
-                                    carrinho_adicionar()
+                                    vendas.carrinho_adicionar()
 
                                 elif int(menu_cliente_carrinho) == 3:
-                                    carrinho_remover()
+                                    vendas.carrinho_remover()
 
                                 elif int(menu_cliente_carrinho) == 4:
-                                    listar_categorias()
+                                    categorias.listar_categorias()
 
                                 elif int(menu_cliente_carrinho) == 5:
-                                    listar_produtos_categoria()
+                                    categorias.listar_produtos_categoria()
 
                                 elif int(menu_cliente_carrinho) == 6:
-                                    finalizar_carrinho()
+                                    vendas.finalizar_carrinho()
 
                                 elif int(menu_cliente_carrinho) == 7:
                                     break
@@ -89,7 +94,7 @@ while True:
 
                         menu_cliente_cpf = menu_cliente_cpf.replace('.', '').replace('-', '')
 
-                        valida_cpf = verifica_cliente(menu_cliente_cpf)
+                        valida_cpf = clientes.verifica_cliente(menu_cliente_cpf)
 
                         if valida_cpf == True:
                             #NOME
@@ -109,7 +114,7 @@ while True:
                                 if valida_campo == True:
                                     break
 
-                            cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
+                            clientes.cadastrar_cliente(menu_cliente_cpf, menu_cliente_nome, menu_cliente_idade)
 
                     elif int(menu_cliente) == 3:
                         break
@@ -159,7 +164,7 @@ while True:
                                 break
 
                         #NOME CATEGORIA
-                        listar_categorias()
+                        categorias.listar_categorias()
                         valida_campo = False
                         while True:
                            menu_produto_categoria = input("Digite a categoria do produto:\n")
@@ -168,7 +173,7 @@ while True:
                                menu_produto_categoria = menu_produto_categoria.lower()
                                break
 
-                        cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco,
+                        produtos.cadastrar_produto(menu_produto_codigo, menu_produto_nome, menu_produto_preco,
                                           menu_produto_categoria)
 
                     elif int(menu_produto) == 2:
@@ -182,26 +187,26 @@ while True:
                                 nome_funcionario = menu_produto_categoria_nome.lower()
                                 break
 
-                        cadastrar_categoria(menu_produto_categoria_nome)
+                        categorias.cadastrar_categoria(menu_produto_categoria_nome)
 
                     elif int(menu_produto) == 3:
-                        listar_produtos()
+                        produtos.listar_produtos()
                         menu_produto_alterar_codigo = input("Digite o código do produto a ser alterado:\n")
-                        alterar_produto(menu_produto_alterar_codigo)
+                        produtos.alterar_produto(menu_produto_alterar_codigo)
 
                     elif int(menu_produto) == 4:
-                        listar_produtos()
+                        produtos.listar_produtos()
 
                     elif int(menu_produto) == 5:
-                        listar_categorias()
+                        categorias.listar_categorias()
 
                     elif int(menu_produto) == 6:
-                        listar_produtos()
+                        produtos.listar_produtos()
                         menu_produto_deletar = input("Digite um codigo de produto para ser removido:\n")
-                        deletar_produto(menu_produto_deletar)
+                        produtos.deletar_produto(menu_produto_deletar)
 
                     elif int(menu_produto) == 7:
-                        listar_categorias()
+                        categorias.listar_categorias()
 
                         #CATEGORIA
                         valida_campo = False
@@ -212,7 +217,7 @@ while True:
                                menu_produto_categoria_deletar = menu_produto_categoria_deletar.lower()
                                break
 
-                        deletar_categoria(menu_produto_categoria_deletar)
+                        categorias.deletar_categoria(menu_produto_categoria_deletar)
 
                     elif int(menu_produto) == 8:
                         break
@@ -230,10 +235,10 @@ while True:
 
                 if menu_consulta in menu_consulta_validos:
                     if int(menu_consulta) == 1:
-                        listar_clientes()
+                        clientes.listar_clientes()
 
                     elif int(menu_consulta) == 2:
-                        listar_vendas()
+                        vendas.listar_vendas()
 
                     elif int(menu_consulta) == 3:
                         break
