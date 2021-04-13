@@ -1,5 +1,5 @@
-2,kibe,3,acougue
-3,bhrama duplo malte,2.78,bebidas
-4,contrafile,50,acougue
+2,kibe,3,NULL
+4,contrafile,50,NULL
 5,vinho tinto guaribaldi,29.90,bebidas
 8238234,morango,3,acessorios
+81,computador intel,2000,informatica

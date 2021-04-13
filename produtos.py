@@ -1,4 +1,5 @@
 import main
+import categorias
 
 def cadastrar_produto(codigo: str, nome: str, preco: str, categoria: str):
     main.produtos_list.clear()
@@ -78,7 +79,7 @@ def alterar_produto(codigo):
                         break
 
                 #NOVA CATEGORIA
-                main.listar_categorias()
+                categorias.listar_categorias()
                 valida_campo = False
                 while True:
                     nova_categoria = input("Digite a nova categoria do produto: \n")
