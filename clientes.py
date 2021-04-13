@@ -1,4 +1,5 @@
 import main
+import cpf_tools as validator
 
 def cadastrar_cliente(cpf: str, nome: str, idade: str):
     with open("clientes.txt", "a") as file:
@@ -38,7 +39,7 @@ def verifica_cliente(cpf: str):
     main.lista_cadastrados.clear()
     with open("clientes.txt", "r") as file:
         for i in file:
-            main.ista_cadastrados.append(i.strip())
+            main.lista_cadastrados.append(i.strip())
 
     for cli in range(len(main.lista_cadastrados)):
         cpf_cadastro = main.lista_cadastrados[cli].split(",")[0]

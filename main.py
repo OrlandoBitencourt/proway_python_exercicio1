@@ -5,6 +5,7 @@ import clientes
 import produtos
 import vendas
 import categorias
+import verificadores
 
 
 from verificadores import verifica_campo_float, verifica_campo_string, verifica_campo_numerico
@@ -66,7 +67,7 @@ while True:
                             menu_cliente_carrinho = input("Digite a opção desejada:\n")
                             if menu_cliente_carrinho in menu_cliente_carrinho_validos:
                                 if int(menu_cliente_carrinho) == 1:
-                                    clientes.informar_cliente()
+                                    vendas.informar_cliente()
 
                                 elif int(menu_cliente_carrinho) == 2:
                                     vendas.carrinho_adicionar()
@@ -78,7 +79,7 @@ while True:
                                     categorias.listar_categorias()
 
                                 elif int(menu_cliente_carrinho) == 5:
-                                    categorias.listar_produtos_categoria()
+                                    vendas.listar_produtos_categoria()
 
                                 elif int(menu_cliente_carrinho) == 6:
                                     vendas.finalizar_carrinho()

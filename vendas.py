@@ -1,13 +1,16 @@
 import main
 import verificadores
 import produtos
+import clientes
+import categorias
+
 from datetime import datetime
 
 def informar_cliente():
     login_cliente = input("Deseja logar como cliente?\n"
                           "Informe seu CPF:\n")
 
-    login = main.verifica_cpf_login(login_cliente)
+    login = clientes.verifica_cpf_login(login_cliente)
 
     if login == True:
         print(f"Cliente logado: {login_cliente}")
@@ -76,7 +79,7 @@ def carrinho_remover():
 
 
 def listar_produtos_categoria():
-    main.listar_categorias()
+    categorias.listar_categorias()
     cat = input("Informe a categoria: \n")
 
     print(f"Lista de categorias:\n")
